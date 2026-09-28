@@ -1,0 +1,26 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "devices": {
+      "$deviceId": {
+        ".read": "auth != null",
+        "live": {
+          ".write": "auth != null",
+          ".validate": "newData.hasChildren(['timestamp','soilMoisture','pumpOn'])"
+        },
+        "config": {
+          ".write": "auth != null",
+          ".validate": "newData.hasChildren(['plantId','soilId','minMoisture','maxMoisture']) && newData.child('minMoisture').isNumber() && newData.child('maxMoisture').isNumber() && newData.child('minMoisture').val() >= 0 && newData.child('maxMoisture').val() <= 100 && newData.child('minMoisture').val() < newData.child('maxMoisture').val()"
+        },
+        "history": {
+          ".write": "auth != null",
+          ".indexOn": ["timestamp"],
+          "$recordId": {
+            ".validate": "newData.hasChildren(['timestamp','soilMoisture','pumpOn'])"
+          }
+        }
+      }
+    }
+  }
+}
